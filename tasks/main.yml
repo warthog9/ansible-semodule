@@ -3,9 +3,23 @@
   yum:
     name:
       - checkpolicy
-      - policycoreutils-python
+
+      - >-
+        {%- if ansible_facts.distribution_major_version|int >= 8 -%}
+          policycoreutils-python-utils
+        {%- else -%}
+          policycoreutils-python
+        {%- endif -%}
+
       - policycoreutils
-      - libselinux-python
+
+      - >-
+        {%- if ansible_facts.distribution_major_version|int >= 8 -%}
+          python3-libselinux
+        {%- else -%}
+          libselinux-python
+        {%- endif -%}
+
     state: present
 
 - name: Enable selinux
